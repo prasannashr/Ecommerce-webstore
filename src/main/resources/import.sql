@@ -1,6 +1,8 @@
+CREATE DATABASE  IF NOT EXISTS `ecommercestore` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `ecommercestore`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
--- Host: localhost    Database: farmerapp
+-- Host: localhost    Database: ecommercestore
 -- ------------------------------------------------------
 -- Server version	5.7.16-log
 
@@ -24,13 +26,13 @@ DROP TABLE IF EXISTS `address`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `address` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `city` varchar(255) DEFAULT NULL,
-  `country` varchar(255) DEFAULT NULL,
-  `state` varchar(255) DEFAULT NULL,
-  `street` varchar(255) DEFAULT NULL,
-  `zip_code` varchar(255) DEFAULT NULL,
+  `city` varchar(255) NOT NULL,
+  `country` varchar(255) NOT NULL,
+  `state` varchar(255) NOT NULL,
+  `street` varchar(255) NOT NULL,
+  `zip_code` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +41,7 @@ CREATE TABLE `address` (
 
 LOCK TABLES `address` WRITE;
 /*!40000 ALTER TABLE `address` DISABLE KEYS */;
-INSERT INTO `address` VALUES (1,'Fairfield','USA','Iowa','4th St.','52557');
+INSERT INTO `address` VALUES (1,'Fairfield','United States','IA','1000N 4th Street, fairfield, Iowa','52557'),(2,'Fairfield','United States','IA','1000N 4th Street, fairfield, Iowa','52557'),(3,'Fairfield','United States','IA','1000N 4th Street, fairfield, Iowa','52557'),(4,'Fairfield','United States','IA','1000N 4th Street, fairfield, Iowa','52557');
 /*!40000 ALTER TABLE `address` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +59,7 @@ CREATE TABLE `authorities` (
   PRIMARY KEY (`id`),
   KEY `FKke6m8fjuf7oi664ekyeu2maw0` (`member_name`),
   CONSTRAINT `FKke6m8fjuf7oi664ekyeu2maw0` FOREIGN KEY (`member_name`) REFERENCES `users` (`member_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +68,7 @@ CREATE TABLE `authorities` (
 
 LOCK TABLES `authorities` WRITE;
 /*!40000 ALTER TABLE `authorities` DISABLE KEYS */;
-INSERT INTO `authorities` VALUES (1,'USER','santosh');
+INSERT INTO `authorities` VALUES (1,'user','bunu'),(2,'farmer','123');
 /*!40000 ALTER TABLE `authorities` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,10 +89,13 @@ CREATE TABLE `member` (
   `phone` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,
   `username` varchar(255) DEFAULT NULL,
+  `order_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKjmifk4o18dly2usbpwsxwg6w3` (`username`),
+  KEY `FKeep6rhx9ldetwmt1otwmd5rh4` (`order_id`),
+  CONSTRAINT `FKeep6rhx9ldetwmt1otwmd5rh4` FOREIGN KEY (`order_id`) REFERENCES `order_1` (`id`),
   CONSTRAINT `FKjmifk4o18dly2usbpwsxwg6w3` FOREIGN KEY (`username`) REFERENCES `users` (`member_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,30 +104,58 @@ CREATE TABLE `member` (
 
 LOCK TABLES `member` WRITE;
 /*!40000 ALTER TABLE `member` DISABLE KEYS */;
-INSERT INTO `member` VALUES (1,'2016-11-19 12:03:51','santosh.dahal23@hotmail.com','Santosh','Dahal','','9841333082','Mr.','santosh');
+INSERT INTO `member` VALUES (1,'2017-01-12 16:20:41','santoshdahal2072@gmail.com','Santosh','Dahal','','6419194206','Mr.','bunu',1),(2,'2017-01-12 16:22:15','santoshdahal2072@gmail.com','abhi','Dahal','','6419194206','Mr.','123',2);
 /*!40000 ALTER TABLE `member` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `order`
+-- Table structure for table `order_1`
 --
 
-DROP TABLE IF EXISTS `order`;
+DROP TABLE IF EXISTS `order_1`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `order` (
+CREATE TABLE `order_1` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `total_price` double NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `order_1`
+--
+
+LOCK TABLES `order_1` WRITE;
+/*!40000 ALTER TABLE `order_1` DISABLE KEYS */;
+INSERT INTO `order_1` VALUES (1,11),(2,0);
+/*!40000 ALTER TABLE `order_1` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `order_1_order_line_list`
+--
+
+DROP TABLE IF EXISTS `order_1_order_line_list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_1_order_line_list` (
+  `order_id` bigint(20) NOT NULL,
+  `order_line_list_id` bigint(20) NOT NULL,
+  UNIQUE KEY `UK_9la3h0kitfmx88ask4s85itf9` (`order_line_list_id`),
+  KEY `FK1jasjn2mc2sujthrfx4yeyqmi` (`order_id`),
+  CONSTRAINT `FK1jasjn2mc2sujthrfx4yeyqmi` FOREIGN KEY (`order_id`) REFERENCES `order_1` (`id`),
+  CONSTRAINT `FKjffa2ujqwg9ouy9c0b6j1vc47` FOREIGN KEY (`order_line_list_id`) REFERENCES `order_line` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `order`
+-- Dumping data for table `order_1_order_line_list`
 --
 
-LOCK TABLES `order` WRITE;
-/*!40000 ALTER TABLE `order` DISABLE KEYS */;
-/*!40000 ALTER TABLE `order` ENABLE KEYS */;
+LOCK TABLES `order_1_order_line_list` WRITE;
+/*!40000 ALTER TABLE `order_1_order_line_list` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order_1_order_line_list` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -134,8 +167,13 @@ DROP TABLE IF EXISTS `order_line`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `order_line` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `price` double NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `product_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKpf904tci8garypkvm32cqupye` (`product_id`),
+  CONSTRAINT `FKpf904tci8garypkvm32cqupye` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,29 +182,69 @@ CREATE TABLE `order_line` (
 
 LOCK TABLES `order_line` WRITE;
 /*!40000 ALTER TABLE `order_line` DISABLE KEYS */;
+INSERT INTO `order_line` VALUES (1,0,1,4),(2,0,1,3);
 /*!40000 ALTER TABLE `order_line` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `person`
+-- Table structure for table `processed_order_details`
 --
 
-DROP TABLE IF EXISTS `person`;
+DROP TABLE IF EXISTS `processed_order_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `person` (
+CREATE TABLE `processed_order_details` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
+  `credit_card_number` varchar(255) DEFAULT NULL,
+  `order_status` varchar(255) DEFAULT NULL,
+  `ordereddate` date DEFAULT NULL,
+  `phone_number` varchar(255) DEFAULT NULL,
+  `shipping_date` datetime DEFAULT NULL,
+  `billing_details_id` bigint(20) DEFAULT NULL,
+  `shipping_address_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKq6u0w31smxkbqrlxuw6l2ay4w` (`billing_details_id`),
+  KEY `FK3dp2ihwgrkqyh3f8wwbsuuv13` (`shipping_address_id`),
+  CONSTRAINT `FK3dp2ihwgrkqyh3f8wwbsuuv13` FOREIGN KEY (`shipping_address_id`) REFERENCES `address` (`id`),
+  CONSTRAINT `FKq6u0w31smxkbqrlxuw6l2ay4w` FOREIGN KEY (`billing_details_id`) REFERENCES `address` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `processed_order_details`
+--
+
+LOCK TABLES `processed_order_details` WRITE;
+/*!40000 ALTER TABLE `processed_order_details` DISABLE KEYS */;
+INSERT INTO `processed_order_details` VALUES (1,'11234567890','PENDING','2017-01-12','6419194206',NULL,3,4);
+/*!40000 ALTER TABLE `processed_order_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `processed_order_details_order_line_list`
+--
+
+DROP TABLE IF EXISTS `processed_order_details_order_line_list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `processed_order_details_order_line_list` (
+  `processed_order_details_id` bigint(20) NOT NULL,
+  `order_line_list_id` bigint(20) NOT NULL,
+  UNIQUE KEY `UK_owm6w2n5p469f2uw9p5kp91vd` (`order_line_list_id`),
+  KEY `FKhdis3g8f6p56qh3q2ncwirfvt` (`processed_order_details_id`),
+  CONSTRAINT `FKf912soxl93sj90kr0fsmfgknt` FOREIGN KEY (`order_line_list_id`) REFERENCES `order_line` (`id`),
+  CONSTRAINT `FKhdis3g8f6p56qh3q2ncwirfvt` FOREIGN KEY (`processed_order_details_id`) REFERENCES `processed_order_details` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `person`
+-- Dumping data for table `processed_order_details_order_line_list`
 --
 
-LOCK TABLES `person` WRITE;
-/*!40000 ALTER TABLE `person` DISABLE KEYS */;
-/*!40000 ALTER TABLE `person` ENABLE KEYS */;
+LOCK TABLES `processed_order_details_order_line_list` WRITE;
+/*!40000 ALTER TABLE `processed_order_details_order_line_list` DISABLE KEYS */;
+INSERT INTO `processed_order_details_order_line_list` VALUES (1,1),(1,2);
+/*!40000 ALTER TABLE `processed_order_details_order_line_list` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -178,11 +256,15 @@ DROP TABLE IF EXISTS `product`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `product` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
+  `category` int(11) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
   `price` double NOT NULL,
-  `qty` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `product_availability` varchar(255) DEFAULT NULL,
+  `farmer_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKbayqrvuf45sj8abt0u51tf53p` (`farmer_id`),
+  CONSTRAINT `FKbayqrvuf45sj8abt0u51tf53p` FOREIGN KEY (`farmer_id`) REFERENCES `member` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -191,6 +273,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
+INSERT INTO `product` VALUES (1,1,'Green Apple',12,'Available',2),(2,1,'Potato',1,'Available',2),(3,1,'Chinese Apple',2,'Out Of Stock',2),(4,1,'Indian Apple',9,'Out Of Stock',2),(5,1,'Packet Onion',6,'Available',2);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,7 +297,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('santosh','santosh');
+INSERT INTO `users` VALUES ('123','123'),('bunu','bunu');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -227,4 +310,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-19 12:04:41
+-- Dump completed on 2017-01-12 16:34:22
