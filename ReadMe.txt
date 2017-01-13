@@ -27,6 +27,7 @@ Run as SpringBootApp
 Before Running
 
 Please  create a schema "ecommercewebstore" in MySQl to run this application
+and import the data to MySQl from import.sql to have prepopulated data
 
 in case there is no self population while running the app or you can't access the log in, 
 try to get the whole schema from src/main/resource folder with the name "import.sql"

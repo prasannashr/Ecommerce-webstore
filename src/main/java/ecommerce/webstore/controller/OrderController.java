@@ -51,17 +51,24 @@ public class OrderController {
 	private MemberService memberService;
 
 	@RequestMapping(value = "/addToCart/{id}", method = RequestMethod.GET)
-	public @ResponseBody Collection<OrderLine> addToCart(@PathVariable("id") long id, Principal user,
+	public @ResponseBody Collection<OrderLine> addToCart(@PathVariable("id") long id, Principal user, Model model,
 			HttpSession session) {
 		Member member = memberService.findByUserName(user.getName()).get(0);
 		
 		Order currentorder = (Order) session.getAttribute("currentorder");
 		if (currentorder == null) {
+			if(member.getOrder()==null){
+				member.setOrder(new Order());
+			}
 			currentorder = member.getOrder();
 			session.setAttribute("currentorder", currentorder);
 			System.out.println("current order is empty");
 		}
 		Product p = productService.findOne(id);
+		if(p.getProductAvailability().equals("Out Of Stock")){
+			model.addAttribute("notAvailable","Out Of Stock");
+			return currentorder.getOrderLineList();
+		}
 		currentorder.addProduct(p);
 		// for updating orders
 		//orderService.saveOrder(currentorder);
@@ -125,8 +132,11 @@ public class OrderController {
 		
 		member.getOrder().setOrderLineList(null);
 		
-		//member.setOrder(null);
-		
+		//setting member's Unprocessed Order to null and processedOrder's member...
+		//.................................................//
+		member.setOrder(null);
+		processedOrder.setMember(member);
+		//............................................//
 		
 		
 		// Lock the product and change it to Out of Stock Mode

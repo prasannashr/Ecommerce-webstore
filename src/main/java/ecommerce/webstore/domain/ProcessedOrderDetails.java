@@ -57,6 +57,19 @@ public class ProcessedOrderDetails {
 	@DateTimeFormat(pattern = "yyyy-mm-dd")
 	@Temporal(TemporalType.DATE)
 	
+	//Each processed order has member Id
+	
+	@Valid
+	@OneToOne(cascade = CascadeType.PERSIST)
+	private Member member;
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
 	//private Date shippingDate= null;
 	private Date ordereddate= new Date();
 	private Date shippingDate= null;

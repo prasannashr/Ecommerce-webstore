@@ -64,6 +64,16 @@ public class HomeController {
 		}
 		Member member = memberService.findByUserName(user.getName()).get(0);
 		
+		//for intial cart check
+		Order currentorder = (Order) session.getAttribute("currentorder");
+		if (currentorder == null) {
+			if(member.getOrder()==null)
+				return "customerdashboard";
+			currentorder = member.getOrder();
+			session.setAttribute("currentorder", currentorder);
+		}
+		model.addAttribute("orderLines", currentorder.getOrderLineList());
+		
 		return "customerdashboard";
 
 	}
